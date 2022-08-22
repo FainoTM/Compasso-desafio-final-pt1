@@ -4,7 +4,7 @@ class FullStock {
 
   constructor () {
     this.message = 'This product cannot be added due stock size';
-    this.statusCode = 507;
+    this.statusCode = 500;
   }
 }
 

@@ -13,6 +13,13 @@ export interface IProduct{
     updateAt?: Date
 }
 
+export interface IProductVar{
+    department?: String;
+    brand?: String;
+    page?: number;
+    limit?: number;
+}
+
 export interface IProductResponse{
     _id: Types.ObjectId,
     title: string,
