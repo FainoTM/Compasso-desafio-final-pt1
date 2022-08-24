@@ -51,6 +51,10 @@ class ProductRepository {
   async update (id: String, payload: IProduct): Promise<IProductResponse | null> {
     return ProductSchema.findByIdAndUpdate(id, payload);
   }
+
+  async insertMany (payload: IProduct[]): Promise<void> {
+    await ProductSchema.insertMany(payload);
+  }
 }
 
 export default new ProductRepository();

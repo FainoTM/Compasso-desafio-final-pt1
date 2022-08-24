@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import productService from '../service/product-service';
+import NotFound from '../error/not-found';
 import ProductService from '../service/product-service';
 
 class ProductController {
@@ -62,8 +62,8 @@ class ProductController {
   async update (req: Request, res: Response) {
     try {
       const id = req.params.id;
-      await productService.update(id, req.body);
-      const updated = await productService.findById(id);
+      await ProductService.update(id, req.body);
+      const updated = await ProductService.findById(id);
       // const { title, description, department, brand, price, qtdStock, barCode } = req.body;
       // const result = await ProductService.update(id, { title, description, department, brand, price, qtdStock, barCode });
       return res.status(201).json(updated);
@@ -71,5 +71,17 @@ class ProductController {
       return res.status(500).json({ error });
     }
   }
+
+  async createCSV (req: Request, res: Response) {
+    try {
+      const csv = req.file?.buffer.toString('utf-8');
+      if (csv === undefined) throw new NotFound();
+      const result = await ProductService.createProductsByCSV(csv);
+      return res.status(200).json(result);
+    } catch (BadRequest) {
+      return res.status(500).json(BadRequest);
+    }
+  }
 }
+
 export default new ProductController();
