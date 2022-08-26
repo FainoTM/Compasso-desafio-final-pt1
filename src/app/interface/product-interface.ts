@@ -51,8 +51,7 @@ export interface IProductResponse{
 export interface ICreateProductsCsv {
     success: Number,
     errors: Number,
-    error_details?: [{title: String, barCode: String, errors?: [String]
-    }]
+    error_details?: [{title: String, barCode: String, errors: [String]}]
 }
 
 export interface IVerifyProduct {
