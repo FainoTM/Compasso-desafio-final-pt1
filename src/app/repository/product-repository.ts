@@ -1,5 +1,5 @@
 import { PaginateResult } from 'mongoose';
-import { IProduct, IProductResponse, IProductVar } from '../interface/product-interface';
+import { IProduct, IProductPatch, IProductResponse, IProductVar } from '../interface/product-interface';
 import paginationProducts from '../Paginate/pagination-products';
 import ProductSchema from '../schema/product-schema';
 import productPattern from '../validation/Pattern/productPattern';
@@ -49,6 +49,10 @@ class ProductRepository {
   }
 
   async update (id: String, payload: IProduct): Promise<IProductResponse | null> {
+    return ProductSchema.findByIdAndUpdate(id, payload);
+  }
+
+  async updatePatch (id: String, payload: IProductPatch): Promise<IProductResponse | null> {
     return ProductSchema.findByIdAndUpdate(id, payload);
   }
 

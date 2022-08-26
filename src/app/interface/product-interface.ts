@@ -13,7 +13,7 @@ export interface IProduct{
     updateAt?: Date
 }
 
-export interface IProductRPatch{
+export interface IProductPatch{
     title?: String,
     description?: String,
     department?: String,
@@ -51,7 +51,7 @@ export interface IProductResponse{
 export interface ICreateProductsCsv {
     success: Number,
     errors: Number,
-    error_details?: [{title: String, barCode: String, errors: [String]}]
+    error_details?: [{title: String, barCode: String, errors?: [String]}]
 }
 
 export interface IVerifyProduct {
