@@ -2,7 +2,7 @@ import { PaginateResult } from 'mongoose';
 import FullStock from '../error/full-stock';
 import BarCodeInvalid from '../error/length-barcode-invalid';
 import MissingId from '../error/missing-id';
-import { ICreateProductsCsv, IProduct, IProductPatch, IProductResponse, IVerifyProduct } from '../interface/product-interface';
+import { ICreateProductsCsv, IProduct, IProductResponse, IVerifyProduct } from '../interface/product-interface';
 import { IPaginate } from '../Paginate/paginate-interface';
 import ProductRepository from '../repository/product-repository';
 
@@ -45,6 +45,11 @@ class ProductService {
     if (result == null) throw new MissingId();
     return result;
   }
+
+  // async authenticate (payload: IAuthenticate) {
+  // const result = await ProductRepository.auth(payload);
+  // return result;
+  // }
 
   async update (id: String, payload: IProduct): Promise<IProductResponse | null> {
     if (payload.barCode.length !== 13) {
