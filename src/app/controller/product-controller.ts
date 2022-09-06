@@ -72,6 +72,17 @@ class ProductController {
     }
   }
 
+  async updatePatch (req: Request, res: Response) {
+    try {
+      const id = req.params.id;
+      await ProductService.update(id, req.body);
+      const updated = await ProductService.findById(id);
+      return res.status(201).json(updated);
+    } catch (error) {
+      return res.status(500).json({ error });
+    }
+  }
+
   async createCSV (req: Request, res: Response) {
     try {
       const csv = req.file?.buffer.toString('utf-8');

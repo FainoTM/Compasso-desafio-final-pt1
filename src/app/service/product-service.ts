@@ -64,6 +64,12 @@ class ProductService {
     return result;
   }
 
+  // async mapper (id: String): Promise<any> {
+  // const result = await ProductRepository.findById(id);
+  // const mapperlayout = require('../../mapper/mapper.json').fields;
+
+  // }
+
   async createProductsByCSV (csv: string): Promise<ICreateProductsCsv> {
     const CsvListObj = csv.split('\n').map((row) => row.replace(/"/gi, '').replace(/\r/gi, '').split(','));
     CsvListObj.shift();
