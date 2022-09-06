@@ -46,11 +46,6 @@ class ProductService {
     return result;
   }
 
-  // async authenticate (payload: IAuthenticate) {
-  // const result = await ProductRepository.auth(payload);
-  // return result;
-  // }
-
   async update (id: String, payload: IProduct): Promise<IProductResponse | null> {
     if (payload.barCode.length !== 13) {
       throw new BarCodeInvalid();
@@ -68,6 +63,12 @@ class ProductService {
     if (result == null) throw new MissingId();
     return result;
   }
+
+  // async mapper (id: String): Promise<any> {
+  // const result = await ProductRepository.findById(id);
+  // const mapperlayout = require('../../mapper/mapper.json').fields;
+
+  // }
 
   async createProductsByCSV (csv: string): Promise<ICreateProductsCsv> {
     const CsvListObj = csv.split('\n').map((row) => row.replace(/"/gi, '').replace(/\r/gi, '').split(','));

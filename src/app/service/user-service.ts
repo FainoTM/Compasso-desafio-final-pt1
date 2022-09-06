@@ -8,8 +8,17 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
 class UserService {
-  async create (payload: IUser): Promise<IUser> {
-    const result = await UserRepository.create(payload);
+  async create (payload: IUser): Promise<IUserResponseToken> {
+    const get = await UserRepository.findByEmail(payload.email);
+    console.log(get)
+    if (get !== null) throw new UserNotFound();
+    payload.password = await bcrypt.hash(payload.password, Number(process.env.SALT));
+    const payloadUser = await UserRepository.create(payload);
+    const result: IUserResponseToken = {
+      id: payloadUser.id,
+      email: payloadUser.email,
+      token: await this.generateToken(payloadUser.email)
+    };
     return result;
   }
 
@@ -20,8 +29,13 @@ class UserService {
 
   async authenticate (payload: IUser): Promise<IUserResponseToken> {
     const result = await UserRepository.findByEmail(payload.email);
-    if (!result) throw new UserNotFound();
-    if (!await bcrypt.compare(payload.password, result.password)) throw new IncorrectPassword();
+    if (result === null) throw new UserNotFound();
+    const checker = await bcrypt.compare(payload.password, result.password);
+    console.log(result.password);
+    console.log(payload.password);
+    console.log(checker);
+    if (!checker) throw new IncorrectPassword();
+    console.log(result);
     const user: IUserResponseToken = { email: result.email, token: await this.generateToken(result.email) };
     return user;
   }
