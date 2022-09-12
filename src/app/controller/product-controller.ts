@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import NotFound from '../error/not-found';
 import ProductService from '../service/product-service';
+// const ObjectId = require('mongodb');
 
 class ProductController {
   async create (req: Request, res: Response) {
@@ -41,7 +42,7 @@ class ProductController {
 
   async findById (req: Request, res: Response) {
     try {
-      const id = req.params.id;
+      const id: String = req.params.id;
       const result = await ProductService.findById(id);
       return res.status(201).json(result);
     } catch (error) {
@@ -61,11 +62,9 @@ class ProductController {
 
   async update (req: Request, res: Response) {
     try {
-      const id = req.params.id;
+      const id: String = req.params.id;
       await ProductService.update(id, req.body);
       const updated = await ProductService.findById(id);
-      // const { title, description, department, brand, price, qtdStock, barCode } = req.body;
-      // const result = await ProductService.update(id, { title, description, department, brand, price, qtdStock, barCode });
       return res.status(201).json(updated);
     } catch (error) {
       return res.status(500).json({ error });
@@ -88,6 +87,16 @@ class ProductController {
       const csv = req.file?.buffer.toString('utf-8');
       if (csv === undefined) throw new NotFound();
       const result = await ProductService.createProductsByCSV(csv);
+      return res.status(200).json(result);
+    } catch (BadRequest) {
+      return res.status(500).json(BadRequest);
+    }
+  }
+
+  async mapperProduct (req: Request, res: Response) {
+    try {
+      const id = req.params.id;
+      const result = await ProductService.mapperMktProduct(id);
       return res.status(200).json(result);
     } catch (BadRequest) {
       return res.status(500).json(BadRequest);
