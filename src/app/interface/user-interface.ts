@@ -1,4 +1,5 @@
 export interface IUser {
+    id?: String,
     email: String,
     password: string
 }
@@ -11,6 +12,7 @@ export interface IUserVar {
 }
 
 export interface IUserResponseToken {
+    id?: String,
     email: String,
     password?: string,
     token: String

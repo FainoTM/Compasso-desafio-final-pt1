@@ -64,7 +64,7 @@ class ProductService {
     return result;
   }
 
-  // not workink
+  // not working
   async mapperMktProduct (id: String): Promise<any> {
     const result: any = await ProductRepository.findById(id);
     if (result === null) throw new MissingId();
