@@ -16,6 +16,7 @@ router.post(`${mainRoute}/csv`, multerConfig.single('file'), ProductController.c
 router.get(`${mainRoute}`, ProductController.findAll);
 router.get(`${mainRoute}/low_stock`, ProductController.findLowStock);
 router.get(`${mainRoute}/:id`, findbyidProductValidation, ProductController.findById);
+router.get(`${mainRoute}/marketplace/:id`, ProductController.mapperProduct);
 router.put(`${mainRoute}/:id`, updateProductValidation, ProductController.update);
 router.patch(`${mainRoute}/:id`, updateProductValidation, ProductController.update);
 router.delete(`${mainRoute}/:id`, deleteProductValidation, ProductController.delete);

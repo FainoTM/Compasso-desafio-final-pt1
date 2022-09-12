@@ -46,11 +46,6 @@ class ProductService {
     return result;
   }
 
-  // async authenticate (payload: IAuthenticate) {
-  // const result = await ProductRepository.auth(payload);
-  // return result;
-  // }
-
   async update (id: String, payload: IProduct): Promise<IProductResponse | null> {
     if (payload.barCode.length !== 13) {
       throw new BarCodeInvalid();
@@ -67,6 +62,99 @@ class ProductService {
     const result = await ProductRepository.update(id, payload);
     if (result == null) throw new MissingId();
     return result;
+  }
+
+  // not workink
+  async mapperMktProduct (id: String): Promise<any> {
+    const result: any = await ProductRepository.findById(id);
+    if (result === null) throw new MissingId();
+    const mapper = require('../../mapper/mapper.json').fields;
+    let formater: any = {};
+    let fieldResult: any = {};
+    const InsertValue = (mapperP: string[], mapperM: string[], type: string, optional: Array<string | number>, formater: any) => {
+      // eslint-disable-next-line no-unreachable-loop
+      for (let index = 0; index <= (mapperM.length - 1); index++) {
+        for (const key in formater) {
+          if (typeof formater[key] === 'object') {
+            if (mapperM[index] === key) {
+              mapperM.shift();
+              formater[key] = {
+                ...formater[key],
+                ...InsertValue(mapperM, mapperP, type, optional, formater[key])
+              };
+              return formater;
+            }
+          } else if (mapperM[index] === key) {
+            mapperM.shift();
+            formater[key] = { ...formater[key], ...InsertValue(mapperM, mapperP, type, optional, formater) };
+            return formater;
+          };
+        }
+        if (mapperM[index] !== mapperM[mapperM.length - 1]) {
+          const field = mapperM[index];
+          mapperM.shift();
+          fieldResult = { [field]: InsertValue(mapperM, mapperP, type, optional, formater) };
+          return fieldResult;
+        } else {
+          fieldResult = { [mapperM[index]]: this.formaterValue(result[mapperP.toString()], type, optional) };
+          return fieldResult;
+        }
+      }
+    };
+
+    for (const key in mapper) {
+      const mapperP: string[] = mapper[key].fieldProduct.split('.');
+      const mapperM: string[] = mapper[key].fieldMarket.split('.');
+      const type: string = mapper[key].type;
+      const optional: Array<string | number> = mapper[key].optional;
+      mapperP.shift();
+      fieldResult = {};
+      formater = { ...formater, ...InsertValue(mapperM, mapperP, type, optional, formater) };
+    };
+    return formater;
+  }
+
+  formaterValue (value: any, type: string, optional: Array<any>): any {
+    if (optional !== undefined) {
+      if (optional[0] === 'currency') {
+        const newValue = new Intl.NumberFormat(
+          optional[1], {
+            style: 'currency',
+            currency: optional[2]
+          }).format(value);
+        return newValue;
+      } else if (optional[0] === 'break') {
+        const newValue: Array<String> = [];
+        let breakValue: string = '';
+        while (value.length > 0) {
+          for (let i = 0; i < optional[1]; i++) {
+            if (value[i]) breakValue += value[i];
+          }
+          for (let i = 0; i < optional[1]; i++) {
+            value = value.slice(1);
+          }
+          newValue.push(breakValue);
+          breakValue = '';
+        }
+        return newValue;
+      };
+    } else {
+      switch (type) {
+      case 'text':
+        return value.toString();
+      case 'array':
+        return [value];
+      case 'boolean':
+        if (value === true || value === 1) {
+          return true;
+        } else {
+          return false;
+        }
+      case 'number':
+        return Number(value);
+      }
+    }
+    return undefined;
   }
 
   async createProductsByCSV (csv: string): Promise<ICreateProductsCsv> {
