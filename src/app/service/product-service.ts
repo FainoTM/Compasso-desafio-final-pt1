@@ -141,6 +141,7 @@ class ProductService {
     } else {
       switch (type) {
       case 'text':
+        console.log(value);
         return value.toString();
       case 'array':
         return [value];
