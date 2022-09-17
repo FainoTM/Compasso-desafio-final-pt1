@@ -1,7 +1,7 @@
 <h1 align="center">CompassMart</h1>
 Final challenge Compasso part 1 <br>
 <br>
-This project is the first part of the final challenge proposed by the Compass's instructors <br><br>
+This project is the final challenge proposed by the Compass's instructors <br><br>
 
 <p align="center">
   <img src="https://img.shields.io/static/v1?label=mongoDB&message=database&color=green&style=for-the-badge&logo=MONGODB"/>
@@ -31,6 +31,9 @@ To run this product is necessary
  - mongoose-paginate-v2
  - nodemon
  - multer
+ - jest
+ - jasonwebtoken
+ - axios
 
 <h3>Language</h3>
 TypeScript
@@ -43,8 +46,14 @@ The database used on this project is mongoose
     - GET:    /api/v1/product        => Find all
     - GET:    /api/v1/product/low_stock   => Find by low stock
     - GET:    /api/v1/product/:id    => Find by Id
+    - GET:    /api/v1/product/marketplace/:id   => Change interface manipulation !Building process!
     - POST:   /api/v1/product        => Create
     - POST:   /api/v1/product/csv    => Read csv
     - PUT:    /api/v1/product/:id    => Update
     - PATCH:   /api/v1/product/:id   => Update Parcial
     - DELETE: /api/v1/product/:id    => Delete
+
+- User
+    - GET:    /api/v1/users        => Find all
+    - POST:   /api/v1/users        => Create
+    - POST:   /api/v1/users/authenticate  => Creating authenticate
